@@ -11,6 +11,8 @@ public class EnemyAI : MonoBehaviour
 
     public GameObject[] wayPoints;//waypoint for enemy patrolling
 
+    public GameObject Flag;
+
     private int currentWayPoint;// need for this
     public float distanceTo;
     public float withinAttackRange = 1f;
@@ -22,7 +24,7 @@ public class EnemyAI : MonoBehaviour
 
     private enum States
     {
-        Patrol, Chase, Attack
+        Retrieve, Chase, Attack, Return
     }
     private States presentState;
 
@@ -30,7 +32,7 @@ public class EnemyAI : MonoBehaviour
     {
        // currentWayPoint = 0;
         //enemy.destination = wayPoints[0].transform.position;
-        presentState = States.Chase;
+        presentState = States.Retrieve;
 
         //enemy is by defualt set to the patrol state and the first wayPoint in the wayPoints array
     }
@@ -40,11 +42,11 @@ public class EnemyAI : MonoBehaviour
 
         switch (presentState)
         {
-            case States.Patrol:
-                Patrol();
+            case States.Retrieve:
+                Retrieve();
                 if (distanceTo <= withinChaseRange)
                 {
-                    Debug.Log("true");
+                    
 
                     presentState = States.Chase;
 
@@ -98,28 +100,11 @@ public class EnemyAI : MonoBehaviour
 
      }
     */
-    public void Patrol()
+    public void Retrieve()
     {
-        int wayPoint;
-        if (!enemy.pathPending && enemy.remainingDistance <= enemy.stoppingDistance)
-        {
-            //since the first wayPoint is set in start, that means the enemy has already calculated its path(!enemy.pathPending)
-            //and because it is within the stopping distance (0.5f) of the wayPoint, the boolean entered is set to true, meaning it has reached the wayPoint.
-            entered = true;
-        }
-
-        if (entered)//checks if entered is true or not
-        {
-            //since it is true it.....
-            wayPoint = Random.Range(0, wayPoints.Length);
-            enemy.destination = wayPoints[wayPoint].transform.position;//sets a new wayPoint for the enemy to move to
-            entered = false; //entered is set to false because the player has not yeat reached its newly assigned wayPoint
-        }
-
-
-
-
-
+          //since it is true it.....
+            enemy.destination = Flag.transform.position;//sets a new wayPoint for the enemy to move to
+        
 
     }
     public void Chase()
