@@ -28,9 +28,9 @@ public class EnemyAI : MonoBehaviour
 
     public void Start()
     {
-        currentWayPoint = 0;
-        enemy.destination = wayPoints[0].transform.position;
-        presentState = States.Patrol;
+       // currentWayPoint = 0;
+        //enemy.destination = wayPoints[0].transform.position;
+        presentState = States.Chase;
 
         //enemy is by defualt set to the patrol state and the first wayPoint in the wayPoints array
     }
@@ -57,10 +57,11 @@ public class EnemyAI : MonoBehaviour
                 {
                     presentState = States.Attack;
                 }
-                else if (distanceTo > withinChaseRange)
+               /* else if (distanceTo > withinChaseRange)
                 {
                     presentState = States.Patrol;
                 }
+               */
                 break;
             case States.Attack:
                 Attack();
