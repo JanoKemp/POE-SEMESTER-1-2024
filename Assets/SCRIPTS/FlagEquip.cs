@@ -11,14 +11,28 @@ public class FlagEquip : MonoBehaviour
     {
         Flag.GetComponent<Rigidbody>().isKinematic = true;//get rigidbody komponent attached to the flag and set isKinematic to true meaning no physics will have an effect of the flag
     }
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        
+        if (other.CompareTag("Character") && Vector3.Distance(transform.position, other.transform.position) <= inPickUpRange)
+        {
+            PickUpFlag();
+        }
     }
+
+
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    void PickUpFlag()
+    {
+        Flag.GetComponent<Rigidbody>().isKinematic = true;
+        Flag.transform.position = FlagHold.transform.position; //sets flag posistion to position of empty object attached to player
+       // Flag.transform.rotation = FlagHold.transform.rotation; //sets flag rotation to rotation of empty object attached to player
+        Flag.GetComponent<MeshCollider>().enabled = false;//disabled the flags collider to prevent it being triggered
+        Flag.transform.SetParent(FlagHold); //sets the empty object called FlagHold as the parent to the gun
     }
 }
