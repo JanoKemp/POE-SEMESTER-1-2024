@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -11,8 +12,13 @@ public class EnemyAI : MonoBehaviour
 
     public GameObject[] wayPoints;//waypoint for enemy patrolling
 
-    public GameObject Flag;
+    public GameObject RedFlag;
+    public GameObject BlueFlag;
 
+    public Transform playerHold;
+    public Transform enemyHold;
+
+    public float inPickUpRange = 2f;
     private int currentWayPoint;// need for this
     public float distanceTo;
     public float withinAttackRange = 1f;
@@ -33,7 +39,7 @@ public class EnemyAI : MonoBehaviour
        // currentWayPoint = 0;
         //enemy.destination = wayPoints[0].transform.position;
         presentState = States.Retrieve;
-
+        RedFlag.GetComponent<Rigidbody>().isKinematic = true;
         //enemy is by defualt set to the patrol state and the first wayPoint in the wayPoints array
     }
     public void Update()
@@ -43,14 +49,14 @@ public class EnemyAI : MonoBehaviour
         switch (presentState)
         {
             case States.Retrieve:
-                Retrieve();
-                if (distanceTo <= withinChaseRange)
+               
+                if (playerHold == null)
                 {
                     
-
                     presentState = States.Chase;
 
                 }
+                else Retrieve();
                 break;
 
             case States.Chase:
@@ -76,11 +82,11 @@ public class EnemyAI : MonoBehaviour
 
         }
     }
-    /*  private void OnTriggerEnter(Collider other)
+     /* private void OnTriggerStay(Collider other)
       {
-          if (other.CompareTag("WayPoint"))
+          if (other.CompareTag("red flag") || other.CompareTag("blue flag"))
           {
-              entered = true;                    //THIS CAUSED PROBLEMS BECAUSE IT JUST CHECKS IF THE PLAYER HAS ENTERED ANY WAYPOINT AND NOT ITS CURRENT WAYPOINT. NO NEED FOR THIS METHOD ANYMORE
+            PickUp();                   //THIS CAUSED PROBLEMS BECAUSE IT JUST CHECKS IF THE PLAYER HAS ENTERED ANY WAYPOINT AND NOT ITS CURRENT WAYPOINT. NO NEED FOR THIS METHOD ANYMORE
           }
       }
     */
@@ -103,10 +109,36 @@ public class EnemyAI : MonoBehaviour
     public void Retrieve()
     {
           //since it is true it.....
-            enemy.destination = Flag.transform.position;//sets a new wayPoint for the enemy to move to
+        // enemy.destination = RedFlag.transform.position;//sets a new wayPoint for the enemy to move to
+        if(Vector3.Distance(transform.position, RedFlag.transform.position) > inPickUpRange )
+        {
+            enemy.destination = RedFlag.transform.position;
+        }
+        else if (Vector3.Distance(transform.position, RedFlag.transform.position) <= inPickUpRange)
+        {
+            RedFlag.GetComponent<Rigidbody>().isKinematic = true;
+            RedFlag.transform.position = enemyHold.transform.position; //sets flag posistion to position of empty object attached to player
+                                                                       // Flag.transform.rotation = FlagHold.transform.rotation; //sets flag rotation to rotation of empty object attached to player
+            RedFlag.GetComponent<MeshCollider>().enabled = false;//disabled the flags collider to prevent it being triggered
+            RedFlag.transform.SetParent(enemyHold); //sets the empty object called FlagHold as the parent to the gun
+        }
+       
+        
         
 
     }
+    /*void PickUp()
+    {
+        if(Vector3.Distance(transform.position, RedFlag.transform.position) <= inPickUpRange) 
+        {
+            RedFlag.GetComponent<Rigidbody>().isKinematic = true;
+            RedFlag.transform.position = enemyHold.transform.position; //sets flag posistion to position of empty object attached to player
+                                                                   // Flag.transform.rotation = FlagHold.transform.rotation; //sets flag rotation to rotation of empty object attached to player
+            RedFlag.GetComponent<MeshCollider>().enabled = false;//disabled the flags collider to prevent it being triggered
+            RedFlag.transform.SetParent(enemyHold); //sets the empty object called FlagHold as the parent to the gun
+        }
+    }
+    */
     public void Chase()
     {
         enemy.destination = player.position;

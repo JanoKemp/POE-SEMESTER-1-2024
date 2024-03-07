@@ -635,30 +635,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bbda2af044d1e804f92a04d93f69e488, type: 3}
       insertIndex: -1
       addedObject: {fileID: 886190475}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bbda2af044d1e804f92a04d93f69e488, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 886190474}
   m_SourcePrefab: {fileID: 100100000, guid: bbda2af044d1e804f92a04d93f69e488, type: 3}
 --- !u!1 &886190473 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: bbda2af044d1e804f92a04d93f69e488, type: 3}
   m_PrefabInstance: {fileID: 886190472}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &886190474
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 886190473}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c82106e72f481c4ab3f980ccb58b20f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Flag: {fileID: 886190473}
-  FlagHold: {fileID: 2008560162}
-  inPickUpRange: 2
 --- !u!54 &886190475
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -878,9 +860,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e105e27aa7858f34999f459fa12acb4f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1180444892}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e105e27aa7858f34999f459fa12acb4f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1180444893}
   m_SourcePrefab: {fileID: 100100000, guid: e105e27aa7858f34999f459fa12acb4f, type: 3}
 --- !u!1 &1180444890 stripped
 GameObject:
@@ -936,21 +915,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6299104670977093542, guid: e105e27aa7858f34999f459fa12acb4f, type: 3}
---- !u!114 &1180444893
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1180444890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c82106e72f481c4ab3f980ccb58b20f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Flag: {fileID: 1180444890}
-  FlagHold: {fileID: 2008560162}
-  inPickUpRange: 2
 --- !u!1 &1554079108
 GameObject:
   m_ObjectHideFlags: 0
@@ -961,7 +925,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1554079109}
   m_Layer: 0
-  m_Name: FlagHold
+  m_Name: enemyHold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1018,7 +982,11 @@ MonoBehaviour:
   player: {fileID: 474950327}
   enemy: {fileID: 1585972471}
   wayPoints: []
-  Flag: {fileID: 886190473}
+  RedFlag: {fileID: 886190473}
+  BlueFlag: {fileID: 0}
+  playerHold: {fileID: 2008560162}
+  enemyHold: {fileID: 1554079109}
+  inPickUpRange: 2
   distanceTo: 0
   withinAttackRange: 1
   entered: 0
@@ -1174,7 +1142,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2008560162}
   m_Layer: 0
-  m_Name: FlagHold
+  m_Name: playerHold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
