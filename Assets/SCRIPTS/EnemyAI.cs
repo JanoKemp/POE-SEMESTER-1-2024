@@ -64,15 +64,26 @@ public class EnemyAI : MonoBehaviour
 
             case States.Chase:
                 Chase();
+                if (RedFlag.transform.position != playerHold.transform.position && BlueFlag.transform.position != playerHold.transform.position)
+                {
+
+                    Retrieve();
+
+                }
+                
+
                 if (distanceTo <= withinAttackRange)
                 {
                     presentState = States.Attack;
                 }
-               /* else if (distanceTo > withinChaseRange)
-                {
-                    presentState = States.Patrol;
-                }
-               */
+
+              
+
+                /* else if (distanceTo > withinChaseRange)
+                 {
+                     presentState = States.Patrol;
+                 }
+                */
                 break;
             case States.Attack:
                 Attack();
@@ -154,7 +165,11 @@ public class EnemyAI : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, RedFlag.transform.position) <= inPickUpRange)
         {
-            RedFlag.transform.position = redFlagSpawn.transform.position;
+            RedFlag.GetComponent<Rigidbody>().isKinematic = true;
+            RedFlag.transform.position = redFlagSpawn.transform.position; //sets flag posistion to position of empty object attached to player
+                                                                       // Flag.transform.rotation = FlagHold.transform.rotation; //sets flag rotation to rotation of empty object attached to player
+            RedFlag.GetComponent<MeshCollider>().enabled = true;//disabled the flags collider to prevent it being triggered
+            RedFlag.transform.SetParent(redFlagSpawn); //sets the empty object called FlagHold as the parent to the gun
         }
     }
 
