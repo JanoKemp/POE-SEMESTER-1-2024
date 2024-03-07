@@ -17,6 +17,8 @@ public class EnemyAI : MonoBehaviour
 
     public Transform playerHold;
     public Transform enemyHold;
+    public Transform blueFlagSpawn;
+    public Transform redFlagSpawn;
 
     public float inPickUpRange = 2f;
     private int currentWayPoint;// need for this
@@ -40,6 +42,7 @@ public class EnemyAI : MonoBehaviour
         //enemy.destination = wayPoints[0].transform.position;
         presentState = States.Retrieve;
         RedFlag.GetComponent<Rigidbody>().isKinematic = true;
+        BlueFlag.GetComponent<Rigidbody>().isKinematic = true;
         //enemy is by defualt set to the patrol state and the first wayPoint in the wayPoints array
     }
     public void Update()
@@ -50,7 +53,7 @@ public class EnemyAI : MonoBehaviour
         {
             case States.Retrieve:
                
-                if (playerHold == null)
+                if (RedFlag.transform.position == playerHold.transform.position || BlueFlag.transform.position == playerHold.transform.position)
                 {
                     
                     presentState = States.Chase;
@@ -108,9 +111,9 @@ public class EnemyAI : MonoBehaviour
     */
     public void Retrieve()
     {
-          //since it is true it.....
+        //since it is true it.....
         // enemy.destination = RedFlag.transform.position;//sets a new wayPoint for the enemy to move to
-        if(Vector3.Distance(transform.position, RedFlag.transform.position) > inPickUpRange )
+        if (Vector3.Distance(transform.position, RedFlag.transform.position) > inPickUpRange)
         {
             enemy.destination = RedFlag.transform.position;
         }
@@ -121,6 +124,10 @@ public class EnemyAI : MonoBehaviour
                                                                        // Flag.transform.rotation = FlagHold.transform.rotation; //sets flag rotation to rotation of empty object attached to player
             RedFlag.GetComponent<MeshCollider>().enabled = false;//disabled the flags collider to prevent it being triggered
             RedFlag.transform.SetParent(enemyHold); //sets the empty object called FlagHold as the parent to the gun
+        }
+        else if (Vector3.Distance(transform.position, BlueFlag.transform.position) <= inPickUpRange)
+        {
+            BlueFlag.transform.position = blueFlagSpawn.transform.position;
         }
        
         
@@ -145,7 +152,10 @@ public class EnemyAI : MonoBehaviour
     }
     public void Attack()
     {
-        Debug.Log("Attacks");
+        if (Vector3.Distance(transform.position, RedFlag.transform.position) <= inPickUpRange)
+        {
+            RedFlag.transform.position = redFlagSpawn.transform.position;
+        }
     }
 
 
