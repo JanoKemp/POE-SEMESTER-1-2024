@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    
+    FlagEquip flagEquip;
     public float moveSpeed = 5f; // Speed of movement
     private float inPickUpRange = 2f;
     public Rigidbody rb; // Reference to the Rigidbody component
     public GameObject RedFlag;
     public GameObject BlueFlag;
     public Transform playerHold;
-    
 
 
+    private void Start()
+    {
+        flagEquip = BlueFlag.GetComponent<FlagEquip>();
+    }
 
     void Update()
     {
@@ -33,9 +36,9 @@ public class Player : MonoBehaviour
 
     void FlagPickUp()
     {
-       
-       
-        if(Vector3.Distance(transform.position, BlueFlag.transform.position) <= inPickUpRange)
+        //Debug.Log(flagEquip.isBlueFlagPickedUp);
+        
+        if(flagEquip.isBlueFlagPickedUp)
         {
             BlueFlag.GetComponent<Rigidbody>().isKinematic = true;
             BlueFlag.transform.position = playerHold.transform.position; //sets flag posistion to position of empty object attached to player

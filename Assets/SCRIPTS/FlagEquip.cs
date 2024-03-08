@@ -17,16 +17,21 @@ public class FlagEquip : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isBlueFlagPickedUp=true;
-        }else if (other.CompareTag("Enemy"))
-        {
-            isBlueFlagPickedUp=false;
         }
 
     }
 
-    
-   
-   
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isBlueFlagPickedUp = false;
+        }
+    }
+
+
+
+
 
 
 

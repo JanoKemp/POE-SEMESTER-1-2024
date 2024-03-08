@@ -62,12 +62,27 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+
+        if (other.CompareTag("red flag"))
+        {
+            entered = false;
+        }
+
+        if (other.CompareTag("blue flag"))
+        {
+            catchBlueFlag = false;
+        }
+    }
+
     public void Update()
     {
 
 
         isBlueEquipped = flagEquip.isBlueFlagPickedUp;
-        Debug.Log(isBlueEquipped);
+        //Debug.Log("blue equipped: " + isBlueEquipped);
+        Debug.Log("In contact with enemy: " + catchBlueFlag);
 
         distanceTo = Vector3.Distance(transform.position, player.position);//transform.position is the position of the enemy and player.position
 
