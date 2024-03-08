@@ -233,7 +233,7 @@ GameObject:
   - component: {fileID: 474950328}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Character
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -874,6 +874,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e105e27aa7858f34999f459fa12acb4f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1180444892}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e105e27aa7858f34999f459fa12acb4f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1180444900}
   m_SourcePrefab: {fileID: 100100000, guid: e105e27aa7858f34999f459fa12acb4f, type: 3}
 --- !u!1 &1180444890 stripped
 GameObject:
@@ -929,6 +932,22 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6299104670977093542, guid: e105e27aa7858f34999f459fa12acb4f, type: 3}
+--- !u!114 &1180444900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180444890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c82106e72f481c4ab3f980ccb58b20f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Flag: {fileID: 1180444890}
+  FlagHold: {fileID: 2008560162}
+  inPickUpRange: 2
+  isBlueFlagPickedUp: 0
 --- !u!1 &1554079108
 GameObject:
   m_ObjectHideFlags: 0
@@ -973,39 +992,14 @@ GameObject:
   - component: {fileID: 1585972473}
   - component: {fileID: 1585972472}
   - component: {fileID: 1585972471}
-  - component: {fileID: 1585972470}
+  - component: {fileID: 1585972476}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Character
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1585972470
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1585972469}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f43b73113f2f70449eee1f1494165e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 474950327}
-  enemy: {fileID: 1585972471}
-  wayPoints: []
-  RedFlag: {fileID: 886190473}
-  BlueFlag: {fileID: 1180444890}
-  playerHold: {fileID: 2008560162}
-  enemyHold: {fileID: 1554079109}
-  blueFlagSpawn: {fileID: 1856953308}
-  redFlagSpawn: {fileID: 218105238}
-  inPickUpRange: 2
-  distanceTo: 0
-  withinAttackRange: 1
-  entered: 0
 --- !u!195 &1585972471
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1117,6 +1111,32 @@ Transform:
   - {fileID: 1554079109}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1585972476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585972469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f43b73113f2f70449eee1f1494165e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flagEquip: {fileID: 1180444900}
+  player: {fileID: 474950327}
+  enemy: {fileID: 1585972471}
+  wayPoints: []
+  RedFlag: {fileID: 886190473}
+  BlueFlag: {fileID: 1180444890}
+  playerHold: {fileID: 2008560162}
+  enemyHold: {fileID: 1554079109}
+  blueFlagSpawn: {fileID: 1856953308}
+  redFlagSpawn: {fileID: 218105238}
+  inPickUpRange: 2
+  distanceTo: 0
+  withinAttackRange: 1
+  entered: 0
 --- !u!1 &1856953307
 GameObject:
   m_ObjectHideFlags: 0
@@ -1191,5 +1211,5 @@ SceneRoots:
   - {fileID: 1585972475}
   - {fileID: 218105238}
   - {fileID: 1856953308}
-  - {fileID: 1180444889}
   - {fileID: 886190472}
+  - {fileID: 1180444889}

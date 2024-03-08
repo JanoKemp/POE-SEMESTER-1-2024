@@ -12,16 +12,18 @@ public class FlagEquip : MonoBehaviour
     {
         //Flag.GetComponent<Rigidbody>().isKinematic = true;//get rigidbody komponent attached to the flag and set isKinematic to true meaning no physics will have an effect of the flag
     }
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             isBlueFlagPickedUp=true;
         }
     }
-   // public bool IsBlueFlagPickedUp {  get { return isBlueFlagPickedUp; } }
+   
+   
 
-    
+
+
 
 
 

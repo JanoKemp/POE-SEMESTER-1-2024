@@ -6,7 +6,7 @@ using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
 public class EnemyAI : MonoBehaviour
 {
-    FlagEquip flagEquip;
+    [SerializeField] FlagEquip flagEquip;
     public Transform player;
 
     public NavMeshAgent enemy;
@@ -28,6 +28,7 @@ public class EnemyAI : MonoBehaviour
     private float withinChaseRange = 3f;
     [SerializeField]
     private bool entered = false;
+    
 
 
 
@@ -39,8 +40,7 @@ public class EnemyAI : MonoBehaviour
 
     public void Start()
     {
-       // currentWayPoint = 0;
-        //enemy.destination = wayPoints[0].transform.position;
+        flagEquip = BlueFlag.GetComponent<FlagEquip>();//setting flagEquip to the instance FlagEquip script on blue flag object
         presentState = States.Retrieve;
         RedFlag.GetComponent<Rigidbody>().isKinematic = true;
         BlueFlag.GetComponent<Rigidbody>().isKinematic = true;
@@ -58,12 +58,17 @@ public class EnemyAI : MonoBehaviour
 
     public void Update()
     {
+
+        
+
+        Debug.Log(flagEquip.isBlueFlagPickedUp);
+
         distanceTo = Vector3.Distance(transform.position, player.position);//transform.position is the position of the enemy and player.position
 
         switch (presentState)
         {
             case States.Retrieve:
-                Debug.Log(entered);
+                //Debug.Log(entered);
 
                 Retrieve();
 
@@ -140,18 +145,7 @@ public class EnemyAI : MonoBehaviour
         
 
     }
-    /*void PickUp()
-    {
-        if(Vector3.Distance(transform.position, RedFlag.transform.position) <= inPickUpRange) 
-        {
-            RedFlag.GetComponent<Rigidbody>().isKinematic = true;
-            RedFlag.transform.position = enemyHold.transform.position; //sets flag posistion to position of empty object attached to player
-                                                                   // Flag.transform.rotation = FlagHold.transform.rotation; //sets flag rotation to rotation of empty object attached to player
-            RedFlag.GetComponent<MeshCollider>().enabled = false;//disabled the flags collider to prevent it being triggered
-            RedFlag.transform.SetParent(enemyHold); //sets the empty object called FlagHold as the parent to the gun
-        }
-    }
-    */
+    
     public void Chase()
     {
         enemy.destination = player.position;
