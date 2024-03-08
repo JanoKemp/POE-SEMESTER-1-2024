@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Flag
   - Character
+  - red flag
+  - blue flag
   layers:
   - Default
   - TransparentFX

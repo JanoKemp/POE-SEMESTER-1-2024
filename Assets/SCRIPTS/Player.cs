@@ -5,21 +5,51 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     
-        public float moveSpeed = 5f; // Speed of movement
-        public Rigidbody rb; // Reference to the Rigidbody component
+    public float moveSpeed = 5f; // Speed of movement
+    private float inPickUpRange = 2f;
+    public Rigidbody rb; // Reference to the Rigidbody component
+    public GameObject RedFlag;
+    public GameObject BlueFlag;
+    public Transform playerHold;
+    
 
-        // Update is called once per frame
-        void Update()
+
+
+    void Update()
+    {
+        // Input for movement in horizontal (left/right) and vertical (forward/backward) directions
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+
+        // Calculate movement direction based on input
+        Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput) * moveSpeed * Time.deltaTime;
+
+        // Move the player based on the calculated movement
+        rb.MovePosition(rb.position + transform.TransformDirection(movement));
+
+        FlagPickUp();
+    }
+
+
+    void FlagPickUp()
+    {
+       
+        if (Vector3.Distance(transform.position, RedFlag.transform.position) <= inPickUpRange)
         {
-            // Input for movement in horizontal (left/right) and vertical (forward/backward) directions
-            float horizontalInput = Input.GetAxis("Horizontal");
-            float verticalInput = Input.GetAxis("Vertical");
-
-            // Calculate movement direction based on input
-            Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput) * moveSpeed * Time.deltaTime;
-
-            // Move the player based on the calculated movement
-            rb.MovePosition(rb.position + transform.TransformDirection(movement));
+            RedFlag.GetComponent<Rigidbody>().isKinematic = true;
+            RedFlag.transform.position = playerHold.transform.position; //sets flag posistion to position of empty object attached to player
+                                                                       // Flag.transform.rotation = FlagHold.transform.rotation; //sets flag rotation to rotation of empty object attached to player
+            RedFlag.GetComponent<MeshCollider>().enabled = false;//disabled the flags collider to prevent it being triggered
+            RedFlag.transform.SetParent(playerHold); //sets the empty object called FlagHold as the parent to the gun
         }
+        else if(Vector3.Distance(transform.position, BlueFlag.transform.position) <= inPickUpRange)
+        {
+            BlueFlag.GetComponent<Rigidbody>().isKinematic = true;
+            BlueFlag.transform.position = playerHold.transform.position; //sets flag posistion to position of empty object attached to player
+                                                                        // Flag.transform.rotation = FlagHold.transform.rotation; //sets flag rotation to rotation of empty object attached to player
+            BlueFlag.GetComponent<MeshCollider>().enabled = false;//disabled the flags collider to prevent it being triggered
+            BlueFlag.transform.SetParent(playerHold); //sets the empty object called FlagHold as the parent to the gun
+        }
+    }
     
 }
