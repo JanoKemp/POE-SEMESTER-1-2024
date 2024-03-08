@@ -28,6 +28,7 @@ public class EnemyAI : MonoBehaviour
     private float withinChaseRange = 3f;
     [SerializeField]
     private bool entered = false;
+    public bool catchBlueFlag = false;  
     
 
 
@@ -54,13 +55,18 @@ public class EnemyAI : MonoBehaviour
         {
             entered = true;
         }
+
+        if (other.CompareTag("blue flag"))
+        {
+            catchBlueFlag = true;
+        }
     }
 
     public void Update()
     {
 
-        
 
+        bool isBlueEquipped = flagEquip.isBlueFlagPickedUp;
         Debug.Log(flagEquip.isBlueFlagPickedUp);
 
         distanceTo = Vector3.Distance(transform.position, player.position);//transform.position is the position of the enemy and player.position
@@ -68,8 +74,6 @@ public class EnemyAI : MonoBehaviour
         switch (presentState)
         {
             case States.Retrieve:
-                //Debug.Log(entered);
-
                 Retrieve();
 
                 if (entered)
@@ -78,23 +82,29 @@ public class EnemyAI : MonoBehaviour
                     presentState = States.Return;
 
                 }
+                else if (isBlueEquipped && entered == false)
+                {
+                    presentState = States.Chase;
+                }
                 
                 break;
+
             case States.Return:
+
                 Return(); 
+
                 break;
 
             case States.Chase:
                 Chase();
-                if (RedFlag.transform.position != playerHold.transform.position && BlueFlag.transform.position != playerHold.transform.position)
+                if (isBlueEquipped == false)
                 {
 
-                    Retrieve();
+                    presentState = States.Retrieve;
 
                 }
                 
-
-                if (distanceTo <= withinAttackRange)
+                if (catchBlueFlag)
                 {
                     presentState = States.Attack;
                 }
@@ -102,10 +112,11 @@ public class EnemyAI : MonoBehaviour
              
                 break;
             case States.Attack:
+
                 Attack();
-                if (distanceTo > withinAttackRange)
+                if (isBlueEquipped == false)
                 {
-                    presentState = States.Chase;
+                    presentState = States.Retrieve;
                 }
                 break;
 
