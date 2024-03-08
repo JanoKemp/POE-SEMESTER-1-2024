@@ -40,7 +40,7 @@ public class EnemyAI : MonoBehaviour
 
     public void Start()
     {
-        flagEquip = BlueFlag.GetComponent<FlagEquip>();//setting flagEquip to the instance FlagEquip script on blue flag object
+        flagEquip = BlueFlag.GetComponent<FlagEquip>();//setting flagEquip to the instance FlagEquip script on blue flag object so that i can access isBlueFlagPickedUp
         presentState = States.Retrieve;
         RedFlag.GetComponent<Rigidbody>().isKinematic = true;
         BlueFlag.GetComponent<Rigidbody>().isKinematic = true;
