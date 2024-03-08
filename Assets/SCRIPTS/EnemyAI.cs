@@ -29,7 +29,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField]
     private bool entered = false;
     public bool catchBlueFlag = false;  
-    
+    public bool isBlueEquipped = false;
 
 
 
@@ -66,8 +66,8 @@ public class EnemyAI : MonoBehaviour
     {
 
 
-        bool isBlueEquipped = flagEquip.isBlueFlagPickedUp;
-        Debug.Log(flagEquip.isBlueFlagPickedUp);
+        isBlueEquipped = flagEquip.isBlueFlagPickedUp;
+        Debug.Log(isBlueEquipped);
 
         distanceTo = Vector3.Distance(transform.position, player.position);//transform.position is the position of the enemy and player.position
 
@@ -133,13 +133,12 @@ public class EnemyAI : MonoBehaviour
     
     public void Retrieve()
     {
-        //since it is true it.....
-        // enemy.destination = RedFlag.transform.position;//sets a new wayPoint for the enemy to move to
+        
         if (Vector3.Distance(transform.position, RedFlag.transform.position) > inPickUpRange)
         {
             enemy.destination = RedFlag.transform.position;
         }
-        else if (Vector3.Distance(transform.position, RedFlag.transform.position) <= inPickUpRange)
+        else if (entered)
         {
             RedFlag.GetComponent<Rigidbody>().isKinematic = true;
             RedFlag.transform.position = enemyHold.transform.position; //sets flag posistion to position of empty object attached to player
@@ -147,10 +146,7 @@ public class EnemyAI : MonoBehaviour
             //RedFlag.GetComponent<BoxCollider>().enabled = false;//disabled the flags collider to prevent it being triggered
             RedFlag.transform.SetParent(enemyHold); //sets the empty object called FlagHold as the parent to the gun
         }
-        else if (Vector3.Distance(transform.position, BlueFlag.transform.position) <= inPickUpRange)
-        {
-            BlueFlag.transform.position = blueFlagSpawn.transform.position;
-        }
+        
        
         
         
@@ -163,14 +159,17 @@ public class EnemyAI : MonoBehaviour
     }
     public void Attack()
     {
-        if (Vector3.Distance(transform.position, RedFlag.transform.position) <= inPickUpRange)
-        {
-            RedFlag.GetComponent<Rigidbody>().isKinematic = true;
-            RedFlag.transform.position = redFlagSpawn.transform.position; //sets flag posistion to position of empty object attached to player
+        
+        
+            BlueFlag.GetComponent<Rigidbody>().isKinematic = true;
+            BlueFlag.transform.position = blueFlagSpawn.transform.position; //sets flag posistion to position of empty object attached to player
                                                                        // Flag.transform.rotation = FlagHold.transform.rotation; //sets flag rotation to rotation of empty object attached to player
            // RedFlag.GetComponent<BoxCollider>().enabled = true;//disabled the flags collider to prevent it being triggered
-            RedFlag.transform.SetParent(redFlagSpawn); //sets the empty object called FlagHold as the parent to the gun
-        }
+            BlueFlag.transform.SetParent(blueFlagSpawn); //sets the empty object called FlagHold as the parent to the gun
+
+        //isBlueEquipped == false;
+
+       
     }
 
 

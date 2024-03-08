@@ -34,21 +34,18 @@ public class Player : MonoBehaviour
     void FlagPickUp()
     {
        
-        if (Vector3.Distance(transform.position, RedFlag.transform.position) <= inPickUpRange)
-        {
-            RedFlag.GetComponent<Rigidbody>().isKinematic = true;
-            RedFlag.transform.position = playerHold.transform.position; //sets flag posistion to position of empty object attached to player
-                                                                       // Flag.transform.rotation = FlagHold.transform.rotation; //sets flag rotation to rotation of empty object attached to player
-            RedFlag.GetComponent<MeshCollider>().enabled = false;//disabled the flags collider to prevent it being triggered
-            RedFlag.transform.SetParent(playerHold); //sets the empty object called FlagHold as the parent to the gun
-        }
-        else if(Vector3.Distance(transform.position, BlueFlag.transform.position) <= inPickUpRange)
+       
+        if(Vector3.Distance(transform.position, BlueFlag.transform.position) <= inPickUpRange)
         {
             BlueFlag.GetComponent<Rigidbody>().isKinematic = true;
             BlueFlag.transform.position = playerHold.transform.position; //sets flag posistion to position of empty object attached to player
                                                                         // Flag.transform.rotation = FlagHold.transform.rotation; //sets flag rotation to rotation of empty object attached to player
-            BlueFlag.GetComponent<MeshCollider>().enabled = false;//disabled the flags collider to prevent it being triggered
+            //BlueFlag.GetComponent<MeshCollider>().enabled = false;//disabled the flags collider to prevent it being triggered
             BlueFlag.transform.SetParent(playerHold); //sets the empty object called FlagHold as the parent to the gun
+        }
+        else if (Vector3.Distance(transform.position, BlueFlag.transform.position) > inPickUpRange)
+        {
+
         }
     }
     
