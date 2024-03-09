@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
         if (other.CompareTag("BlueBase"))
         {
             inContactWithBlueBase = true;
-            Score.instance.addPlayerScore();
+            Score.instance.PlayerScore();
         }
     }
 

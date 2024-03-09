@@ -10,7 +10,7 @@ public class ReloadScene : MonoBehaviour
         if (other.CompareTag("Player") || other.CompareTag("Enemy"))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            Score.instance.Save();
+            
             
         }
     }

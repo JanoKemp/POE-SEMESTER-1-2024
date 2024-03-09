@@ -70,7 +70,7 @@ public class EnemyAI : MonoBehaviour
         if (other.CompareTag("RedBase"))
         {
             inContactWithBase = true;
-            Score.instance.addEnemyScore();//get addEnemyScore to add point to enemyScore when enemy comes in contact with RedBase
+            Score.instance.EnemyScore();//get addEnemyScore to add point to enemyScore when enemy comes in contact with RedBase
         }
 
 
