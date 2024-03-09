@@ -7,6 +7,8 @@ using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 public class EnemyAI : MonoBehaviour
 {
     [SerializeField] FlagEquip flagEquip;
+    
+    /// </summary>
     public Transform player;
 
     public NavMeshAgent enemy;
@@ -25,7 +27,6 @@ public class EnemyAI : MonoBehaviour
     
     public float distanceTo;
     public float withinAttackRange = 1f;
-    private float withinChaseRange = 3f;
     [SerializeField]
     private bool entered = false;
     public bool catchBlueFlag = false;  
@@ -41,6 +42,8 @@ public class EnemyAI : MonoBehaviour
 
     public void Start()
     {
+        
+
         flagEquip = BlueFlag.GetComponent<FlagEquip>();//setting flagEquip to the instance FlagEquip script on blue flag object so that i can access isBlueFlagPickedUp
         presentState = States.Retrieve;
         RedFlag.GetComponent<Rigidbody>().isKinematic = true;
@@ -78,8 +81,10 @@ public class EnemyAI : MonoBehaviour
 
     public void Update()
     {
+        
+        Debug.Log("Is red picked up by enemy: " + entered);
 
-        Debug.Log(entered);
+
 
         isBlueEquipped = flagEquip.isBlueFlagPickedUp;
         //Debug.Log("blue equipped: " + isBlueEquipped);
@@ -92,13 +97,13 @@ public class EnemyAI : MonoBehaviour
             case States.Retrieve:
                 Retrieve();
 
-                if (entered)
+                if (entered)//if enemy has picked up red
                 {
                     
                     presentState = States.Return;
 
                 }
-                else if (isBlueEquipped && entered == false)
+                else if (isBlueEquipped && entered == false)//player picked up blue and enemy has not picked up red
                 {
                     presentState = States.Chase;
                 }
@@ -108,25 +113,23 @@ public class EnemyAI : MonoBehaviour
             case States.Return:
                 Return();
 
-                if (entered == false)
+                if (entered == false)//if enemy has not picked up red
                 {
                     presentState = States.Retrieve;
                 }
-
-                
 
                 break;
 
             case States.Chase:
                 Chase();
-                if (isBlueEquipped == false)
+                if (isBlueEquipped == false) // has player picked up blue
                 {
 
                     presentState = States.Retrieve;
 
                 }
                 
-                if (catchBlueFlag)
+                if (catchBlueFlag)//if enemy has captured blue flag
                 {
                     presentState = States.Attack;
                 }
@@ -136,7 +139,7 @@ public class EnemyAI : MonoBehaviour
             case States.Attack:
 
                 Attack();
-                if (isBlueEquipped == false)
+                if (isBlueEquipped == false)//if player does not have blue flag
                 {
                     presentState = States.Retrieve;
                 }
@@ -156,11 +159,9 @@ public class EnemyAI : MonoBehaviour
     public void Retrieve()
     {
         
-        if (Vector3.Distance(transform.position, RedFlag.transform.position) > inPickUpRange)
-        {
-            enemy.destination = RedFlag.transform.position;
-        }
-        else if (entered)
+         enemy.destination = RedFlag.transform.position;
+        
+        if (entered)
         {
             RedFlag.GetComponent<Rigidbody>().isKinematic = true;
             RedFlag.transform.position = enemyHold.transform.position; //sets flag posistion to position of empty object attached to player
@@ -169,10 +170,6 @@ public class EnemyAI : MonoBehaviour
             RedFlag.transform.SetParent(enemyHold); //sets the empty object called FlagHold as the parent to the gun
         }
         
-       
-        
-        
-
     }
     
     public void Chase()

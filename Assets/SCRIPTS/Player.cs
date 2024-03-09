@@ -14,7 +14,12 @@ public class Player : MonoBehaviour
     public Transform blueBase;
     private bool redCaptured;
 
-   private void OnTriggerEnter(Collider other)
+
+    private void Start()
+    {
+        flagEquip = BlueFlag.GetComponent<FlagEquip>();
+    }
+    public void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("red flag"))
         {
@@ -22,20 +27,19 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    public void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("red flag"))
         {
             redCaptured = false;
         }
     }
-    private void Start()
-    {
-        flagEquip = BlueFlag.GetComponent<FlagEquip>();
-    }
+   
 
     void Update()
     {
+        Debug.Log("is red captured: " + redCaptured);
+
         // Input for movement in horizontal (left/right) and vertical (forward/backward) directions
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");

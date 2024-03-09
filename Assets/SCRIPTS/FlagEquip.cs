@@ -29,15 +29,6 @@ public class FlagEquip : MonoBehaviour
         }
     }
 
-
-
-
-
-
-
-
-
-
     // Update is called once per frame
     void Update()
     {
