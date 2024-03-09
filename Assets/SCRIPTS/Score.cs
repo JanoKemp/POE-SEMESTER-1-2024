@@ -9,13 +9,13 @@ public class Score : MonoBehaviour
     public TextMeshProUGUI enemyScoreText;
     public TextMeshProUGUI playerScoreText;
     public static Score instance;
-    private int enemyScore = 0;
-    private int playerScore = 0;
+    private int enemyCurrentScore = 0;
+    private int playerCurrentScore = 0;
     // Start is called before the first frame update
     void Start()
     {
-        enemyScoreText.text = "Enemy score: " + enemyScore.ToString();
-        playerScoreText.text = "Player score: " + playerScore.ToString();
+        LoadUpdatedScores();
+        ScoreDisplay();
 
     }
     private void Awake()
@@ -25,13 +25,32 @@ public class Score : MonoBehaviour
 
     public void addPlayerScore()
     {
-        playerScore += 1;
-        playerScoreText.text = "Player score: " + playerScore.ToString();
+        playerCurrentScore += 1;
+        playerScoreText.text = "Player score: " + playerCurrentScore.ToString();
+        Save();
 
     }
     public void addEnemyScore()
     {
-        enemyScore += 1;
-        enemyScoreText.text = "Enemy score: " + enemyScore.ToString();
+        enemyCurrentScore += 1;
+        enemyScoreText.text = "Enemy score: " + enemyCurrentScore.ToString();
+        Save();
+    }
+    private void LoadUpdatedScores()
+    {
+        playerCurrentScore = PlayerPrefs.GetInt("Player score", 0);
+        enemyCurrentScore = PlayerPrefs.GetInt("Enemy Scores", 0);
+    }
+    public void Save()
+    {
+        PlayerPrefs.SetInt("PlayerScore", playerCurrentScore);
+        PlayerPrefs.SetInt("EnemyScore", enemyCurrentScore);
+        PlayerPrefs.Save();
+    }
+    private void ScoreDisplay()
+    {
+        playerScoreText.text = "Player score: " + playerCurrentScore.ToString();
+        enemyScoreText.text = "Enemy score: " + enemyCurrentScore.ToString();
+
     }
 }
