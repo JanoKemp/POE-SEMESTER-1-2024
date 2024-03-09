@@ -79,10 +79,11 @@ public class EnemyAI : MonoBehaviour
     public void Update()
     {
 
+        Debug.Log(entered);
 
         isBlueEquipped = flagEquip.isBlueFlagPickedUp;
         //Debug.Log("blue equipped: " + isBlueEquipped);
-        Debug.Log("In contact with enemy: " + catchBlueFlag);
+        //Debug.Log("In contact with enemy: " + catchBlueFlag);
 
         distanceTo = Vector3.Distance(transform.position, player.position);//transform.position is the position of the enemy and player.position
 
@@ -105,8 +106,14 @@ public class EnemyAI : MonoBehaviour
                 break;
 
             case States.Return:
+                Return();
 
-                Return(); 
+                if (entered == false)
+                {
+                    presentState = States.Retrieve;
+                }
+
+                
 
                 break;
 

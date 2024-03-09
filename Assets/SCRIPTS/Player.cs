@@ -11,8 +11,24 @@ public class Player : MonoBehaviour
     public GameObject RedFlag;
     public GameObject BlueFlag;
     public Transform playerHold;
+    public Transform blueBase;
+    private bool redCaptured;
 
+   private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("red flag"))
+        {
+            redCaptured = true;
+        }
+    }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("red flag"))
+        {
+            redCaptured = false;
+        }
+    }
     private void Start()
     {
         flagEquip = BlueFlag.GetComponent<FlagEquip>();
@@ -37,19 +53,22 @@ public class Player : MonoBehaviour
     void FlagPickUp()
     {
         //Debug.Log(flagEquip.isBlueFlagPickedUp);
-        
-        if(flagEquip.isBlueFlagPickedUp)
+
+        if (flagEquip.isBlueFlagPickedUp)
         {
             BlueFlag.GetComponent<Rigidbody>().isKinematic = true;
             BlueFlag.transform.position = playerHold.transform.position; //sets flag posistion to position of empty object attached to player
-                                                                        // Flag.transform.rotation = FlagHold.transform.rotation; //sets flag rotation to rotation of empty object attached to player
-            //BlueFlag.GetComponent<MeshCollider>().enabled = false;//disabled the flags collider to prevent it being triggered
+                                                                         // Flag.transform.rotation = FlagHold.transform.rotation; //sets flag rotation to rotation of empty object attached to player
+                                                                         //BlueFlag.GetComponent<MeshCollider>().enabled = false;//disabled the flags collider to prevent it being triggered
             BlueFlag.transform.SetParent(playerHold); //sets the empty object called FlagHold as the parent to the gun
         }
-        else if (Vector3.Distance(transform.position, BlueFlag.transform.position) > inPickUpRange)
+        else if (redCaptured)
         {
-
+            RedFlag.GetComponent<Rigidbody>().isKinematic = true;
+            RedFlag.transform.position = blueBase.transform.position; //sets flag posistion to position of empty object attached to player
+                                                                       // Flag.transform.rotation = FlagHold.transform.rotation; //sets flag rotation to rotation of empty object attached to player
+                                                                       // RedFlag.GetComponent<BoxCollider>().enabled = true;//disabled the flags collider to prevent it being triggered
+            RedFlag.transform.SetParent(blueBase); //sets the empty object called FlagHold as the parent to the gun        }
         }
     }
-    
 }
