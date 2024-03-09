@@ -12,6 +12,8 @@ public class Score : MonoBehaviour
     public static Score instance;
     public int enemyScore = 0;
     public int playerScore = 0;
+    public int totalPlayerScore;
+    public int totalEnemyScore;
 
 
     void Start()
@@ -22,13 +24,7 @@ public class Score : MonoBehaviour
         
         Display();//display saved scores when scene reloads through text on screen
     }
-    private void Update()
-    {
-        if (playerScore == 5 || enemyScore == 5)
-        {
-            SceneManager.LoadScene("GameOver");
-        }
-    }
+   
 
     private void Awake()
     {
@@ -39,6 +35,7 @@ public class Score : MonoBehaviour
     {
         playerScore += 1;//add 1pt to score when player enters blue base collider
         playerScoreText.text = "Player score: " + playerScore.ToString();//display current score through test
+        Winner();
         Save();//calling save method to save player scores
     }
 
@@ -46,35 +43,64 @@ public class Score : MonoBehaviour
     {
         enemyScore += 1;//add 1pt to score when enemy enters red base collider
         enemyScoreText.text = "Enemy score: " + enemyScore.ToString();//display current score through test
+        Winner();
         Save();//calling save method to save enemy scores
     }
 
    
-    private void Display()
+    public void Display()
     {
         playerScoreText.text = "Player score: " + playerScore.ToString(); 
         enemyScoreText.text = "Enemy score: " + enemyScore.ToString();
     }
 
-    private void Save()
+    public void Save()
     {
         PlayerPrefs.SetInt("PlayerScore", playerScore); //sets the value of playerScore to the key PlayerScore
         PlayerPrefs.SetInt("EnemyScore", enemyScore); //sets the value of enemyScore to the key EnemyScore
         PlayerPrefs.Save();//using a built in method to save the key_value pair
     }
 
-    private void Load()
+    public void Load()
     {
-       
-        if (PlayerPrefs.HasKey("PlayerScore"))//checks if there is a value stored associated with this key and returns true if there is and false if there is not
+
+        if (PlayerPrefs.HasKey("PlayerScore")) //checks if there is a value stored associated with this key and returns true if there is and false if there is not
+        {
             playerScore = PlayerPrefs.GetInt("PlayerScore");//if it returns true which it does in this case it will set the value associated with this key to the cariable playerScore
+            totalPlayerScore = playerScore;
+        }
 
         if (PlayerPrefs.HasKey("EnemyScore"))
+        {
             enemyScore = PlayerPrefs.GetInt("EnemyScore");
+            totalEnemyScore = enemyScore;
+        }
+    }
+    private void Winner()
+    {
+        if (playerScore == 2)
+        {
+            LoadScene("Player");
+        }else if(enemyScore == 2)
+        {
+            LoadScene("Enemy");
+        }
+        
+    }
+    void LoadScene(string winner)
+    {
+        SceneManager.LoadScene("GameOver");
+        PlayerPrefs.SetString("Winner", winner);
+        Save();
     }
 
-    
+
+
     private void OnApplicationQuit()
+    {
+       ResetValues();
+    }
+    public void ResetValues()
     {
         playerScore = 0;
         enemyScore = 0;//resets all the values when application is exited

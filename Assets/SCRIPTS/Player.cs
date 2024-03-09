@@ -6,7 +6,6 @@ public class Player : MonoBehaviour
 {
     FlagEquip flagEquip;
     public float moveSpeed = 5f; // Speed of movement
-    private float inPickUpRange = 2f;
     public Rigidbody rb; // Reference to the Rigidbody component
     public GameObject RedFlag;
     public GameObject BlueFlag;
