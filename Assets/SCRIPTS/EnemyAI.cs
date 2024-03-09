@@ -18,6 +18,8 @@ public class EnemyAI : MonoBehaviour
     public GameObject RedFlag;
     public GameObject BlueFlag;
 
+    public Transform RedBase;
+
     public Transform playerHold;
     public Transform enemyHold;
     public Transform blueFlagSpawn;
@@ -153,7 +155,7 @@ public class EnemyAI : MonoBehaviour
 
      public void Return()
      {
-        enemy.destination = blueFlagSpawn.position;
+        enemy.destination = RedBase.position;
      }
     
     public void Retrieve()
