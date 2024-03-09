@@ -33,6 +33,7 @@ public class EnemyAI : MonoBehaviour
     private bool entered = false;
     public bool catchBlueFlag = false;  
     public bool isBlueEquipped = false;
+    public bool inContactWithBase = false;
 
 
 
@@ -65,6 +66,14 @@ public class EnemyAI : MonoBehaviour
         {
             catchBlueFlag = true;
         }
+        
+        if (other.CompareTag("RedBase"))
+        {
+            inContactWithBase = true;
+            Score.instance.addEnemyScore();//get addEnemyScore to add point to enemyScore when enemy comes in contact with RedBase
+        }
+
+
     }
 
     private void OnTriggerExit(Collider other)
@@ -79,12 +88,14 @@ public class EnemyAI : MonoBehaviour
         {
             catchBlueFlag = false;
         }
+
+       
     }
 
     public void Update()
     {
         
-        Debug.Log("Is red picked up by enemy: " + entered);
+        Debug.Log("In contact with base: " + inContactWithBase);
 
 
 

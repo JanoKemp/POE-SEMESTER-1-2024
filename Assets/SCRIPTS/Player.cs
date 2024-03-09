@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     public Transform playerHold;
     public Transform blueBase;
     private bool redCaptured;
-
+    private bool inContactWithBlueBase = false;
 
     private void Start()
     {
@@ -24,6 +24,12 @@ public class Player : MonoBehaviour
         if (other.CompareTag("red flag"))
         {
             redCaptured = true;
+        }
+
+        if (other.CompareTag("BlueBase"))
+        {
+            inContactWithBlueBase = true;
+            Score.instance.addPlayerScore();
         }
     }
 
@@ -38,7 +44,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("is red captured: " + redCaptured);
+        Debug.Log("is in contact with blue base: " + inContactWithBlueBase);
 
         // Input for movement in horizontal (left/right) and vertical (forward/backward) directions
         float horizontalInput = Input.GetAxis("Horizontal");
