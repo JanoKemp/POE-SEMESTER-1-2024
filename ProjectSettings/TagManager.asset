@@ -9,6 +9,9 @@ TagManager:
   - red flag
   - blue flag
   - Enemy
+  - BlueBase
+  - RedBase
+  - Score
   layers:
   - Default
   - TransparentFX

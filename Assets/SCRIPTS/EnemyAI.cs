@@ -7,6 +7,8 @@ using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 public class EnemyAI : MonoBehaviour
 {
     [SerializeField] FlagEquip flagEquip;
+    
+    /// </summary>
     public Transform player;
 
     public NavMeshAgent enemy;
@@ -15,6 +17,8 @@ public class EnemyAI : MonoBehaviour
 
     public GameObject RedFlag;
     public GameObject BlueFlag;
+
+    public Transform RedBase;
 
     public Transform playerHold;
     public Transform enemyHold;
@@ -25,10 +29,11 @@ public class EnemyAI : MonoBehaviour
     
     public float distanceTo;
     public float withinAttackRange = 1f;
-    private float withinChaseRange = 3f;
     [SerializeField]
     private bool entered = false;
-    
+    public bool catchBlueFlag = false;  
+    public bool isBlueEquipped = false;
+    public bool inContactWithBase = false;
 
 
 
@@ -40,7 +45,9 @@ public class EnemyAI : MonoBehaviour
 
     public void Start()
     {
-        flagEquip = BlueFlag.GetComponent<FlagEquip>();//setting flagEquip to the instance FlagEquip script on blue flag object
+        
+
+        flagEquip = BlueFlag.GetComponent<FlagEquip>();//setting flagEquip to the instance FlagEquip script on blue flag object so that i can access isBlueFlagPickedUp
         presentState = States.Retrieve;
         RedFlag.GetComponent<Rigidbody>().isKinematic = true;
         BlueFlag.GetComponent<Rigidbody>().isKinematic = true;
@@ -54,47 +61,88 @@ public class EnemyAI : MonoBehaviour
         {
             entered = true;
         }
+
+        if (other.CompareTag("blue flag"))
+        {
+            catchBlueFlag = true;
+        }
+        
+        if (other.CompareTag("RedBase"))
+        {
+            inContactWithBase = true;
+            Score.instance.EnemyScore();//get addEnemyScore to add point to enemyScore when enemy comes in contact with RedBase
+        }
+
+
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+
+        if (other.CompareTag("red flag"))
+        {
+            entered = false;
+        }
+
+        if (other.CompareTag("blue flag"))
+        {
+            catchBlueFlag = false;
+        }
+
+       
     }
 
     public void Update()
     {
-
         
+        Debug.Log("In contact with base: " + inContactWithBase);
 
-        Debug.Log(flagEquip.isBlueFlagPickedUp);
+
+
+        isBlueEquipped = flagEquip.isBlueFlagPickedUp;
+        //Debug.Log("blue equipped: " + isBlueEquipped);
+        //Debug.Log("In contact with enemy: " + catchBlueFlag);
 
         distanceTo = Vector3.Distance(transform.position, player.position);//transform.position is the position of the enemy and player.position
 
         switch (presentState)
         {
             case States.Retrieve:
-                //Debug.Log(entered);
-
                 Retrieve();
 
-                if (entered)
+                if (entered)//if enemy has picked up red
                 {
                     
                     presentState = States.Return;
 
                 }
+                else if (isBlueEquipped && entered == false)//player picked up blue and enemy has not picked up red
+                {
+                    presentState = States.Chase;
+                }
                 
                 break;
+
             case States.Return:
-                Return(); 
+                Return();
+
+                if (entered == false)//if enemy has not picked up red
+                {
+                    presentState = States.Retrieve;
+                }
+
                 break;
 
             case States.Chase:
                 Chase();
-                if (RedFlag.transform.position != playerHold.transform.position && BlueFlag.transform.position != playerHold.transform.position)
+                if (isBlueEquipped == false) // has player picked up blue
                 {
 
-                    Retrieve();
+                    presentState = States.Retrieve;
 
                 }
                 
-
-                if (distanceTo <= withinAttackRange)
+                if (catchBlueFlag)//if enemy has captured blue flag
                 {
                     presentState = States.Attack;
                 }
@@ -102,10 +150,11 @@ public class EnemyAI : MonoBehaviour
              
                 break;
             case States.Attack:
+
                 Attack();
-                if (distanceTo > withinAttackRange)
+                if (isBlueEquipped == false)//if player does not have blue flag
                 {
-                    presentState = States.Chase;
+                    presentState = States.Retrieve;
                 }
                 break;
 
@@ -117,18 +166,15 @@ public class EnemyAI : MonoBehaviour
 
      public void Return()
      {
-        enemy.destination = blueFlagSpawn.position;
+        enemy.destination = RedBase.position;
      }
     
     public void Retrieve()
     {
-        //since it is true it.....
-        // enemy.destination = RedFlag.transform.position;//sets a new wayPoint for the enemy to move to
-        if (Vector3.Distance(transform.position, RedFlag.transform.position) > inPickUpRange)
-        {
-            enemy.destination = RedFlag.transform.position;
-        }
-        else if (Vector3.Distance(transform.position, RedFlag.transform.position) <= inPickUpRange)
+        
+         enemy.destination = RedFlag.transform.position;
+        
+        if (entered)
         {
             RedFlag.GetComponent<Rigidbody>().isKinematic = true;
             RedFlag.transform.position = enemyHold.transform.position; //sets flag posistion to position of empty object attached to player
@@ -136,14 +182,7 @@ public class EnemyAI : MonoBehaviour
             //RedFlag.GetComponent<BoxCollider>().enabled = false;//disabled the flags collider to prevent it being triggered
             RedFlag.transform.SetParent(enemyHold); //sets the empty object called FlagHold as the parent to the gun
         }
-        else if (Vector3.Distance(transform.position, BlueFlag.transform.position) <= inPickUpRange)
-        {
-            BlueFlag.transform.position = blueFlagSpawn.transform.position;
-        }
-       
         
-        
-
     }
     
     public void Chase()
@@ -152,14 +191,17 @@ public class EnemyAI : MonoBehaviour
     }
     public void Attack()
     {
-        if (Vector3.Distance(transform.position, RedFlag.transform.position) <= inPickUpRange)
-        {
-            RedFlag.GetComponent<Rigidbody>().isKinematic = true;
-            RedFlag.transform.position = redFlagSpawn.transform.position; //sets flag posistion to position of empty object attached to player
+        
+        
+            BlueFlag.GetComponent<Rigidbody>().isKinematic = true;
+            BlueFlag.transform.position = blueFlagSpawn.transform.position; //sets flag posistion to position of empty object attached to player
                                                                        // Flag.transform.rotation = FlagHold.transform.rotation; //sets flag rotation to rotation of empty object attached to player
            // RedFlag.GetComponent<BoxCollider>().enabled = true;//disabled the flags collider to prevent it being triggered
-            RedFlag.transform.SetParent(redFlagSpawn); //sets the empty object called FlagHold as the parent to the gun
-        }
+            BlueFlag.transform.SetParent(blueFlagSpawn); //sets the empty object called FlagHold as the parent to the gun
+
+        //isBlueEquipped == false;
+
+       
     }
 
 

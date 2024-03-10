@@ -18,14 +18,16 @@ public class FlagEquip : MonoBehaviour
         {
             isBlueFlagPickedUp=true;
         }
+
     }
-   
-   
 
-
-
-
-
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isBlueFlagPickedUp = false;
+        }
+    }
 
     // Update is called once per frame
     void Update()
