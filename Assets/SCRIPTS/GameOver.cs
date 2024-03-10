@@ -11,13 +11,19 @@ using TMPro;
 public class GameOver : MonoBehaviour
 {
     public TextMeshProUGUI winner;
-    public string GameWinner;
+
+
+    private string GameWinner;
 
     private void Start()
     {
-        GameWinner = PlayerPrefs.GetString("Winner");
-        winner.text = "Winner: " + GameWinner;
+        GameWinner = PlayerPrefs.GetString("Winner");//getting value associated with key Winner and setting it to GameWinner
+        winner.text = "Winner: " + GameWinner;//display winner
+
+       
     }
+
+  
 
 
 

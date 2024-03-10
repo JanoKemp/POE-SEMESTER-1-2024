@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class Score : MonoBehaviour
 {
+    
     public TextMeshProUGUI enemyScoreText;
     public TextMeshProUGUI playerScoreText;
     public static Score instance;
@@ -15,7 +16,7 @@ public class Score : MonoBehaviour
     public int totalPlayerScore;
     public int totalEnemyScore;
 
-
+    
     void Start()
     {
         
@@ -80,7 +81,7 @@ public class Score : MonoBehaviour
     {
         if (playerScore == 2)
         {
-            LoadScene("Player");
+            LoadScene("Player");//passing the winner to the load method and the playerPref 
         }else if(enemyScore == 2)
         {
             LoadScene("Enemy");
@@ -89,9 +90,10 @@ public class Score : MonoBehaviour
     }
     void LoadScene(string winner)
     {
-        SceneManager.LoadScene("GameOver");
-        PlayerPrefs.SetString("Winner", winner);
-        Save();
+        SceneManager.LoadScene("GameOver");//loading the GameOver scene
+        PlayerPrefs.SetString("Winner", winner);//soring the winner string in the winner variable and then associating it to the key Winner
+        Save();//saving the winner
+        ResetValues();
     }
 
 
