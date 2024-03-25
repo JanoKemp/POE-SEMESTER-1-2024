@@ -79,10 +79,10 @@ public class Score : MonoBehaviour
     }
     private void Winner()
     {
-        if (playerScore == 2)
+        if (playerScore == 5)
         {
             LoadScene("Player");//passing the winner to the load method and the playerPref 
-        }else if(enemyScore == 2)
+        }else if(enemyScore == 5)
         {
             LoadScene("Enemy");
         }
